@@ -26,15 +26,15 @@ function App() {
     sessionStorage.removeItem('bandhanam_user');
   };
 
-  const fetchFiles = useCallback(async () => {
+  const fetchFiles = useCallback(async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const data = await listFiles();
       setFiles(data);
     } catch {
-      setFiles([]);
+      if (showLoading) setFiles([]);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   }, []);
 

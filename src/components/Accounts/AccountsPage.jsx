@@ -6,6 +6,7 @@ import AccountsCharts from './AccountsCharts';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { listTransactions, createTransaction, updateTransaction, deleteTransaction, getTransactionSummary } from '../../api';
+import { exportToExcel, exportToPDF } from './exportTransactions';
 import './AccountsPage.css';
 
 const pageVariants = {
@@ -86,12 +87,38 @@ function AccountsPage({ user }) {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
           </button>
         </div>
-        <motion.button className="add-txn-btn" onClick={handleAdd} whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.02 }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          Add Transaction
-        </motion.button>
+        <div className="accounts-actions">
+          <motion.button className="add-txn-btn" onClick={handleAdd} whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.02 }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Transaction
+          </motion.button>
+          <div className="export-btns">
+            <button
+              className="export-btn excel"
+              onClick={() => { exportToExcel(transactions, `Transactions_${year}`); toast.success('Excel exported'); }}
+              disabled={transactions.length === 0}
+              title="Export to Excel"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              Excel
+            </button>
+            <button
+              className="export-btn pdf"
+              onClick={() => { exportToPDF(transactions, `Transactions_${year}`); toast.success('PDF exported'); }}
+              disabled={transactions.length === 0}
+              title="Export to PDF"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
+              </svg>
+              PDF
+            </button>
+          </div>
+        </div>
       </div>
 
       <SummaryCards summary={summary} />

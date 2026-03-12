@@ -61,8 +61,7 @@ describe('App', () => {
   it('renders the main app when user is in session', () => {
     sessionStorage.setItem('bandhanam_user', 'Meenketan');
     render(<App />);
-    expect(screen.getByText('Upload')).toBeInTheDocument();
-    expect(screen.getByText(/My Documents/)).toBeInTheDocument();
+    expect(screen.getByText(/All Documents/)).toBeInTheDocument();
     expect(screen.getByText('Accounts')).toBeInTheDocument();
     expect(screen.getByText(/Bandhanam Private Limited/)).toBeInTheDocument();
   });

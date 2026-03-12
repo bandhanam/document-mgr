@@ -82,17 +82,6 @@ function App() {
       <main className="main-content">
         <nav className="tab-nav">
           <button
-            className={`tab-btn ${activeTab === 'upload' ? 'active' : ''}`}
-            onClick={() => setActiveTab('upload')}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            Upload
-          </button>
-          <button
             className={`tab-btn ${activeTab === 'files' ? 'active' : ''}`}
             onClick={() => {
               setActiveTab('files');
@@ -106,7 +95,7 @@ function App() {
               <line x1="16" y1="17" x2="8" y2="17" />
               <polyline points="10 9 9 9 8 9" />
             </svg>
-            My Documents
+            All Documents
             {files.length > 0 && <span className="badge">{files.length}</span>}
           </button>
           <button
@@ -121,7 +110,7 @@ function App() {
           </button>
         </nav>
 
-        <div className="tab-content" style={{ display: activeTab === 'upload' ? 'block' : 'none' }}>
+        <div className="tab-content" style={{ display: activeTab === 'files' ? 'block' : 'none' }}>
           <FileUpload
             user={user}
             onUploadComplete={async (newFile) => {
@@ -131,11 +120,9 @@ function App() {
                   return exists ? prev : [newFile, ...prev];
                 });
               }
-              setActiveTab('files');
+              fetchFiles();
             }}
           />
-        </div>
-        <div className="tab-content" style={{ display: activeTab === 'files' ? 'block' : 'none' }}>
           <FileList
             files={filteredFiles}
             loading={loading}

@@ -80,7 +80,7 @@ function TransactionForm({ isOpen, onClose, onSubmit, editData, user }) {
 
   return (
     <AnimatePresence>
-      <motion.div className="txn-form-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+      <motion.div className="txn-form-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <motion.div
           className="txn-form-modal"
           initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -150,7 +150,7 @@ function TransactionForm({ isOpen, onClose, onSubmit, editData, user }) {
 
             <div className="txn-form-row">
               <div className="txn-field">
-                <label>Approved By</label>
+                <label>Expensed By</label>
                 <select name="approvedBy" value={form.approvedBy} onChange={handleChange}>
                   <option value="">Select...</option>
                   {USERS.map((u) => (<option key={u} value={u}>{u}</option>))}

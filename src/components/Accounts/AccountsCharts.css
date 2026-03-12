@@ -1,4 +1,4 @@
-.accounts-charts {
+.accounts-charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
@@ -11,6 +11,10 @@
   border-radius: var(--radius-md);
   padding: 1rem;
   box-shadow: var(--shadow-sm);
+}
+
+.chart-panel-full {
+  grid-column: 1 / -1;
 }
 
 .chart-title {
@@ -32,7 +36,7 @@
 }
 
 @media (max-width: 640px) {
-  .accounts-charts {
+  .accounts-charts-grid {
     grid-template-columns: 1fr;
   }
 }

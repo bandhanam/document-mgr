@@ -129,6 +129,36 @@
   text-overflow: ellipsis;
 }
 
+.txn-card-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.txn-card-category-badge {
+  font-size: 0.68rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 8px;
+  background: rgba(26, 127, 100, 0.08);
+  color: var(--color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.txn-card-person {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.txn-card-extra {
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+  font-style: italic;
+}
+
 .txn-card-right {
   display: flex;
   align-items: center;

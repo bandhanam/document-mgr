@@ -29,8 +29,6 @@ function FileUpload({ onUploadComplete, user }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
-    maxSize: 25 * 1024 * 1024,
-    onDropRejected: () => toast.error('File too large. Max 25MB.'),
   });
 
   const handleUpload = async () => {
@@ -123,7 +121,7 @@ function FileUpload({ onUploadComplete, user }) {
               <p className="dropzone-text">
                 {isDragActive ? 'Drop it here!' : 'Drag & drop a file here'}
               </p>
-              <p className="dropzone-hint">or tap to browse · Max 25 MB</p>
+              <p className="dropzone-hint">or tap to browse</p>
             </div>
           )}
         </div>

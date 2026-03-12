@@ -12,7 +12,7 @@ function sanitizeFilename(name) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const form = formidable({ maxFileSize: 50 * 1024 * 1024 });
+    const form = formidable({ maxFileSize: 500 * 1024 * 1024 });
     const [fields, files] = await form.parse(req);
 
     const file = files.file?.[0];

@@ -111,6 +111,11 @@ function TransactionList({ transactions, loading, onEdit, onDelete, onFilterChan
                         {txn.payeeVendor && ` · ${txn.payeeVendor}`}
                         {txn.projectDepartment && ` · ${txn.projectDepartment}`}
                       </span>
+                      <span className="txn-card-detail-row">
+                        <span className="txn-card-category-badge">{txn.category}</span>
+                        {txn.approvedBy && <span className="txn-card-person">Expensed by: {txn.approvedBy}</span>}
+                        {txn.transactionDetails && <span className="txn-card-extra">{txn.transactionDetails}</span>}
+                      </span>
                     </div>
                   </div>
                   <div className="txn-card-right">

@@ -218,9 +218,17 @@ export async function getTransactionSummary(year) {
     args: [yearFilter],
   });
 
+  const byPerson = await client.execute({
+    sql: `SELECT approved_by as person, type, SUM(amount) as total, COUNT(*) as count
+          FROM transactions WHERE strftime('%Y', date) = ? AND approved_by IS NOT NULL AND approved_by != ''
+          GROUP BY approved_by, type ORDER BY total DESC`,
+    args: [yearFilter],
+  });
+
   return {
     totals: totals.rows.map((r) => ({ type: r.type, total: r.total })),
     monthly: monthly.rows.map((r) => ({ month: r.month, type: r.type, total: r.total })),
     byCategory: byCategory.rows.map((r) => ({ category: r.category, type: r.type, total: r.total })),
+    byPerson: byPerson.rows.map((r) => ({ person: r.person, type: r.type, total: r.total, count: r.count })),
   };
 }

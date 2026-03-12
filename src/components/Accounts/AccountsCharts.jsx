@@ -1,8 +1,11 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import './AccountsCharts.css';
 
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const PIE_COLORS = ['#1a7f64', '#2c5282', '#d97706', '#dc2626', '#7c3aed', '#059669', '#0891b2', '#be185d', '#ca8a04'];
+const PERSON_COLORS = ['#2c5282', '#1a7f64', '#d97706', '#dc2626', '#7c3aed', '#059669', '#be185d', '#0891b2', '#ca8a04'];
+
+const currencyFmt = (v) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(v);
 
 function AccountsCharts({ summary }) {
   const monthlyData = MONTH_LABELS.map((label, i) => {
@@ -16,8 +19,13 @@ function AccountsCharts({ summary }) {
     .filter((c) => c.type === 'expense')
     .map((c) => ({ name: c.category, value: c.total }));
 
+  const personData = (summary?.byPerson || [])
+    .filter((p) => p.type === 'expense')
+    .map((p) => ({ name: p.person, Amount: p.total, count: p.count }));
+
   const hasMonthlyData = monthlyData.some((d) => d.Income > 0 || d.Expense > 0);
   const hasCategoryData = categoryData.length > 0;
+  const hasPersonData = personData.length > 0;
 
   const formatCurrency = (val) => {
     if (val >= 100000) return `${(val / 100000).toFixed(1)}L`;
@@ -26,7 +34,7 @@ function AccountsCharts({ summary }) {
   };
 
   return (
-    <div className="accounts-charts">
+    <div className="accounts-charts-grid">
       <div className="chart-panel">
         <h3 className="chart-title">Monthly Overview</h3>
         {hasMonthlyData ? (
@@ -34,7 +42,7 @@ function AccountsCharts({ summary }) {
             <BarChart data={monthlyData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
               <XAxis dataKey="name" tick={{ fontSize: 11 }} />
               <YAxis tickFormatter={formatCurrency} tick={{ fontSize: 11 }} />
-              <Tooltip formatter={(v) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(v)} />
+              <Tooltip formatter={currencyFmt} />
               <Bar dataKey="Income" fill="#16a34a" radius={[4, 4, 0, 0]} />
               <Bar dataKey="Expense" fill="#dc2626" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -54,11 +62,31 @@ function AccountsCharts({ summary }) {
                   <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(v) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(v)} />
+              <Tooltip formatter={currencyFmt} />
             </PieChart>
           </ResponsiveContainer>
         ) : (
           <div className="chart-empty">No expense data yet</div>
+        )}
+      </div>
+
+      <div className="chart-panel chart-panel-full">
+        <h3 className="chart-title">Expenses by Person</h3>
+        {hasPersonData ? (
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={personData} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 0 }}>
+              <XAxis type="number" tickFormatter={formatCurrency} tick={{ fontSize: 11 }} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={90} />
+              <Tooltip formatter={currencyFmt} labelFormatter={(name) => name} />
+              <Bar dataKey="Amount" radius={[0, 4, 4, 0]}>
+                {personData.map((_, i) => (
+                  <Cell key={i} fill={PERSON_COLORS[i % PERSON_COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="chart-empty">No person-wise expense data yet</div>
         )}
       </div>
     </div>

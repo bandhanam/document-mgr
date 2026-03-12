@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export function useFilePolling(fetchFiles, intervalMs = 5000) {
+export function useFilePolling(fetchFiles, intervalMs = 15000) {
   const callbackRef = useRef(fetchFiles);
   callbackRef.current = fetchFiles;
 
@@ -9,7 +9,7 @@ export function useFilePolling(fetchFiles, intervalMs = 5000) {
 
     function poll() {
       if (document.visibilityState === 'visible') {
-        callbackRef.current();
+        callbackRef.current(false);
       }
     }
 
@@ -20,7 +20,7 @@ export function useFilePolling(fetchFiles, intervalMs = 5000) {
     function handleVisibility() {
       clearInterval(timer);
       if (document.visibilityState === 'visible') {
-        callbackRef.current();
+        callbackRef.current(false);
         startPolling();
       }
     }

@@ -68,34 +68,10 @@ function ExpenseSplit({ summary }) {
 
     members.sort((a, b) => b.settlement - a.settlement);
 
-    const overpayers = members.filter((m) => m.settlement > 0);
-    const underpayers = members.filter((m) => m.settlement < 0);
-
-    const transfers = [];
-    let oi = 0;
-    let ui = 0;
-    const oBalances = overpayers.map((o) => o.settlement);
-    const uBalances = underpayers.map((u) => Math.abs(u.settlement));
-
-    while (oi < overpayers.length && ui < underpayers.length) {
-      const amount = Math.min(oBalances[oi], uBalances[ui]);
-      if (amount > 0.5) {
-        transfers.push({
-          from: underpayers[ui].name,
-          to: overpayers[oi].name,
-          amount: Math.round(amount),
-        });
-      }
-      oBalances[oi] -= amount;
-      uBalances[ui] -= amount;
-      if (oBalances[oi] < 0.5) oi++;
-      if (uBalances[ui] < 0.5) ui++;
-    }
-
-    return { totalExpenses, fairShare, members, transfers };
+    return { totalExpenses, fairShare, members };
   }, [summary]);
 
-  const { totalExpenses, fairShare, members, transfers } = splitData;
+  const { totalExpenses, fairShare, members } = splitData;
   const hasData = totalExpenses > 0;
 
   return (
@@ -180,26 +156,6 @@ function ExpenseSplit({ summary }) {
             </ResponsiveContainer>
           </div>
 
-          {transfers.length > 0 && (
-            <div className="split-transfers">
-              <h4 className="transfers-title">Settlement Transfers</h4>
-              <p className="transfers-subtitle">Minimum transfers to settle all balances</p>
-              <div className="transfers-list">
-                {transfers.map((t, i) => (
-                  <div key={i} className="transfer-row">
-                    <span className="transfer-from">{t.from}</span>
-                    <span className="transfer-arrow">
-                      <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
-                        <path d="M1 7h16M13 1l5 6-5 6" stroke="#1a7f64" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                    <span className="transfer-to">{t.to}</span>
-                    <span className="transfer-amount">{currencyFmt(t.amount)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </>
       ) : (
         <div className="split-empty">
